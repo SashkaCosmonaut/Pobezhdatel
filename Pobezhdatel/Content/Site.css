@@ -53,6 +53,7 @@
   resize: none;
   margin-right: 1em;
 }
+/* Container for the message text and player name. */
 .message {
   display: flex;
   flex-direction: row;
@@ -65,15 +66,18 @@
   margin-bottom: 1em;
   border-bottom: solid 1px #e1e1e1;
 }
+/* Remove border of the last message. */
 .message:last-of-type {
   border: none;
 }
+/* Properties of player name in a message.*/
 .player-name {
   text-align: center;
   font-weight: bold;
   min-width: 70px;
   width: 70px;
 }
+/* Properties of message text.*/
 .message-body {
   flex-grow: 1;
   margin-left: 20px;
