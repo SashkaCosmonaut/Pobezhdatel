@@ -3,23 +3,42 @@
   display: flex;
   flex-direction: row-reverse;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-around;
   align-items: flex-start;
+  margin-bottom: 1em;
   width: 100%;
 }
 /* Properties of game chat - most part of screen.*/
 .game-chat {
   flex-grow: 1;
+  width: 200px;
+  height: 500px;
   text-align: center;
   overflow-y: auto;
-  min-height: 500px;
+  padding: 20px;
+  border: solid 1px #ddd;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 /* Properties of game info - a little panel on the left side.. */
-.game-chat-info {
-  flex-grow: 1;
-  min-height: 500px;
-  max-width: 200px;
+.game-info {
+  height: 500px;
+  width: 200px;
+  padding: 15px;
   margin-left: 1em;
+  border: solid 1px #ddd;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+/* On small screen info panel goes up.*/
+@media all and (max-width: 700px) {
+  .game-info {
+    width: 100%;
+    min-height: 170px;
+    height: 0;
+    margin-left: 0;
+    margin-bottom: 1em;
+  }
 }
 /* Properties of main input field and button. */
 .main-chat-input {
@@ -34,11 +53,28 @@
   resize: none;
   margin-right: 1em;
 }
-/* On small screen info panel goes up.*/
-@media all and (max-width: 700px) {
-  .game-chat-info {
-    max-width: 100%;
-    min-height: 0;
-    margin-left: 0;
-  }
+.message {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  text-align: left;
+  padding-bottom: 0.5em;
+  width: 100%;
+  margin-bottom: 1em;
+  border-bottom: solid 1px #e1e1e1;
+}
+.message:last-of-type {
+  border: none;
+}
+.player-name {
+  text-align: center;
+  font-weight: bold;
+  min-width: 70px;
+  width: 70px;
+}
+.message-body {
+  flex-grow: 1;
+  margin-left: 20px;
 }
