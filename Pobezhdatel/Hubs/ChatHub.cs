@@ -2,11 +2,19 @@
 
 namespace Pobezhdatel.Hubs
 {
+    /// <summary>
+    /// Main game chat.
+    /// </summary>
     public class ChatHub : Hub
     {
-        public void Send(string name, string message)
+        /// <summary>
+        /// Send a message to the main game chat.
+        /// </summary>
+        /// <param name="playerName">Name of the player.</param>
+        /// <param name="message">Player's message.</param>
+        public void Send(string playerName, string message)
         {
-            Clients.All.addMessageToPage(name, message);
+            Clients.All.addMessageToPage(playerName, message);
         }
     }
 }
