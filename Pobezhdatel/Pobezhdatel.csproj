@@ -129,8 +129,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\Site.css">
+      <DependentUpon>Site.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Site.min.css">
+      <DependentUpon>Site.css</DependentUpon>
+    </Content>
     <Content Include="Global.asax" />
+    <Content Include="Content\Site.less" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
     <None Include="Properties\PublishProfiles\SimplePublish.pubxml" />
     <None Include="Scripts\JQuery\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\JQuery\jquery-3.1.1.js" />
