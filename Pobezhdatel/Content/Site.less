@@ -1,1 +1,53 @@
-﻿
+﻿/* Panel for chat and info fields - full screen. */
+.game-chat-panel {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+
+    width: 100%;
+}
+
+/* Properties of game chat - most part of screen.*/
+.game-chat {
+    flex-grow: 1;
+
+    text-align: center;
+    overflow-y: auto;
+    min-height: 500px;
+}
+
+/* Properties of game info - a little panel on the left side.. */
+.game-chat-info {
+    flex-grow: 1;
+
+    min-height: 500px;
+    max-width: 200px;
+    margin-left: 1em;
+}
+
+/* Properties of main input field and button. */
+.main-chat-input {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+}
+
+/* Properties of chat textarea. */
+.main-chat-input textarea {
+   resize: none;
+   margin-right: 1em;
+}
+
+/* On small screen info panel goes up.*/
+@media all and (max-width: 700px) {
+    .game-chat-info {
+        max-width: 100%;
+        min-height: 0;
+        margin-left: 0;
+    }
+}

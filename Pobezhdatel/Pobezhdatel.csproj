@@ -133,6 +133,7 @@
     <Content Include="Content\Bootstrap\bootstrap-theme.min.css" />
     <Content Include="Content\Bootstrap\bootstrap.css" />
     <Content Include="Content\Bootstrap\bootstrap.min.css" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\Site.css">
       <DependentUpon>Site.less</DependentUpon>
     </Content>
@@ -154,6 +155,10 @@
     <Content Include="Content\Bootstrap\bootstrap.css.map" />
     <Content Include="Content\Bootstrap\bootstrap-theme.min.css.map" />
     <Content Include="Content\Bootstrap\bootstrap-theme.css.map" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\PublishProfiles\SimplePublish.pubxml" />
     <None Include="Scripts\JQuery\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\Bootstrap\bootstrap.js" />
