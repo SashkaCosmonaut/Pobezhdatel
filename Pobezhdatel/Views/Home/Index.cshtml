@@ -14,13 +14,59 @@
     </div>
 
     <div class="main-chat-input">
-        <textarea class="form-control" rows="7"></textarea>
-        <button type="button" class="btn btn-default btn-lg">
+        <textarea id="message-input" class="form-control" rows="7"></textarea>
+        <button id="add-msg-btn" type="button" class="btn btn-default btn-lg">
             <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
         </button>
     </div>
 </div>
 
 <script>
+    // At first ask player's name
+    var playerName = prompt("Введите Ваше имя:", "");
 
+    $("#message-input").focus();    // Then focus on the message input
+
+    // Handle a click on the button for message addition
+    $("#add-msg-btn").click(function () {
+        addMessage();
+    });
+
+    // Handle key pressed event to catch Ctrl+Enter keys pressing
+    $(document).keypress(function (event) {
+        // if this is the Enter key - 13 (10 in Chrome) an Ctrl is pressed
+        if ((event.keyCode === 10 || event.keyCode === 13) && event.ctrlKey) {
+            addMessage();
+        }
+    });
+
+    /**
+     * Add a new message from a user.
+     */
+    function addMessage() {
+        // If there is only one child and this is a text, remove it
+        if ($(".game-chat")[0].childNodes[0].nodeName === "#text") {
+            $(".game-chat").empty();
+        }
+
+        // Append a new message block to chat
+        $(".game-chat").append(getMessageBlock(playerName, $("#message-input").val()));
+
+        $("#message-input").val("");    // Clear message input
+        $("#message-input").focus();    // And focus on it again
+    }
+
+    /**
+     * Get string with HTML code of the message block that is inserted to game chat.
+     * param playerName String with player name.
+     * param messageText String with player's message.
+     * return String with HTML code of the message block.
+     */
+    function getMessageBlock(playerName, messageText) {
+        return "<div class='message'><div class='player-name'>" +
+            playerName +
+            "</div><div class='message-body'>" +
+            messageText +
+            "</div></div>";
+    }
 </script>
