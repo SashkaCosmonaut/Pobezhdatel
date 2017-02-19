@@ -14,7 +14,7 @@ namespace Pobezhdatel.Hubs
         /// <param name="message">Player's message.</param>
         public void Send(string playerName, string message)
         {
-            Clients.All.addMessageToPage(playerName, message);
+            Clients.All.addMessageToChat(playerName, message);
         }
     }
 }

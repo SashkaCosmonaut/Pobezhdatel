@@ -60,6 +60,10 @@
         // Append a new message block to chat
         $(".game-chat").append(getMessageBlock(messageText));
 
+        // Scroll game chat to the bottom
+        // http://stackoverflow.com/questions/1890995/jquery-scroll-to-bottom-of-page-iframe
+        $(".game-chat").animate({ scrollTop: $(document).height() }, "slow");
+
         $("#message-input").val("");    // Clear message input
         $("#message-input").focus();    // And focus on it again
     }
