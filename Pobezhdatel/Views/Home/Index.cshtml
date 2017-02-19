@@ -25,32 +25,40 @@
     // At first ask player's name
     var playerName = prompt("Введите Ваше имя:", "");
 
+    // If there is no name or it is empty, then set Anonymous name
+    if (isEmptyOrSpaces(playerName)) {
+        playerName = "Анонимус";
+    }
+
     $("#message-input").focus();    // Then focus on the message input
 
     // Handle a click on the button for message addition
     $("#add-msg-btn").click(function () {
-        addMessage();
+        addMessage($("#message-input").val());
     });
 
     // Handle key pressed event to catch Ctrl+Enter keys pressing
     $(document).keypress(function (event) {
         // if this is the Enter key - 13 (10 in Chrome) an Ctrl is pressed
         if ((event.keyCode === 10 || event.keyCode === 13) && event.ctrlKey) {
-            addMessage();
+            addMessage($("#message-input").val());
         }
     });
 
     /**
      * Add a new message from a user.
+     * param messageText String with message.
      */
-    function addMessage() {
+    function addMessage(messageText) {
+        if (isEmptyOrSpaces(messageText)) return;   // Disable empty message addition
+
         // If there is only one child and this is a text, remove it
         if ($(".game-chat")[0].childNodes[0].nodeName === "#text") {
             $(".game-chat").empty();
         }
 
         // Append a new message block to chat
-        $(".game-chat").append(getMessageBlock(playerName, $("#message-input").val()));
+        $(".game-chat").append(getMessageBlock(messageText));
 
         $("#message-input").val("");    // Clear message input
         $("#message-input").focus();    // And focus on it again
@@ -58,15 +66,21 @@
 
     /**
      * Get string with HTML code of the message block that is inserted to game chat.
-     * param playerName String with player name.
      * param messageText String with player's message.
      * return String with HTML code of the message block.
      */
-    function getMessageBlock(playerName, messageText) {
+    function getMessageBlock(messageText) {
         return "<div class='message'><div class='player-name'>" +
             playerName +
             "</div><div class='message-body'>" +
             messageText +
             "</div></div>";
+    }
+
+    /**
+     * Check is a string empty or contains spaces or newline characters only.
+     */
+    function isEmptyOrSpaces(str) {
+        return str === null || str === undefined || str.match(/^( |\n)*$/) !== null;
     }
 </script>
