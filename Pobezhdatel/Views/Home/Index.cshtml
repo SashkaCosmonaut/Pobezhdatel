@@ -31,6 +31,19 @@
         curreentPlayerName = "Анонимус";
     }
 
+    // Then load previous messages
+    $.ajax({
+        url: "@Url.Action("GetMessages")",
+        type: "POST",
+        async: true,
+        success: function (messagesString) {
+            // Parse messages and add them to container
+            $.each(JSON.parse(messagesString), function () {
+                addMessageToChat(this.PlayerName, this.Text);
+            });
+        }
+    });
+
     $("#message-input").focus();    // Then focus on the message input
 
     // Start the connection
@@ -76,9 +89,15 @@
             $(".game-chat").empty();
         }
 
-        // Append a new message block to chat
-        $(".game-chat").append(getMessageBlock(playerName, message));
+        addMessageToChat(playerName, message);
     };
+
+    /**
+     * Append a new message block to chat container.
+     */
+    function addMessageToChat(playerName, message) {
+        $(".game-chat").append(getMessageBlock(playerName, message));
+    }
 
     /**
      * Get string with HTML code of the message block that is inserted to game chat from specified player.

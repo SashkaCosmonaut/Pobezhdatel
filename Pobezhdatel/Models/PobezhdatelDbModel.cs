@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using log4net;
 using Pobezhdatel.DB;
 
@@ -58,6 +59,30 @@ namespace Pobezhdatel.Models
             {
                 Log.Error("AddMessage", ex);
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Get all existed messages from DB.
+        /// </summary>
+        /// <returns>Array of message models from DB.</returns>
+        public MessageModel[] GetMessages()
+        {
+            Log.Debug("GetMessages");
+
+            try
+            {
+                using (var db = new PobezhdatelDbDataContext())
+                {
+                    return db.T_Messages
+                        .Select(q => new MessageModel(q.Timestamp, q.PlayerName, q.Text, q.Id))
+                        .ToArray();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error("GetMessages", ex);
+                return new MessageModel[0];
             }
         }
     }

@@ -38,11 +38,13 @@ namespace Pobezhdatel.Models
         /// <param name="timestamp">Date and time of the message sending.</param>
         /// <param name="playerName">Name of player that sent the message.</param>
         /// <param name="text">Text of the message.</param>
-        public MessageModel(DateTime timestamp, string playerName, string text)
+        /// <param name="id">Id of the message (used only for DB).</param>
+        public MessageModel(DateTime timestamp, string playerName, string text, int id = 0)
         {
             Timestamp = timestamp;
             PlayerName = playerName;
             Text = text;
+            Id = id;
         }
 
         /// <summary>
