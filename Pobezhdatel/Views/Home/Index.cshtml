@@ -22,62 +22,76 @@
 </div>
 
 <script>
-    // At first ask player's name
-    var playerName = prompt("Введите Ваше имя:", "");
+    
+    // At first ask current player's name, encode it and save
+    var curreentPlayerName = htmlEncode(prompt("Введите Ваше имя:", ""));
+    var chat = $.connection.chatHub;        // Reference the auto-generated proxy for the hub
 
     // If there is no name or it is empty, then set Anonymous name
-    if (isEmptyOrSpaces(playerName)) {
-        playerName = "Анонимус";
+    if (isEmptyOrSpaces(curreentPlayerName)) {
+        curreentPlayerName = "Анонимус";
     }
 
     $("#message-input").focus();    // Then focus on the message input
 
-    // Handle a click on the button for message addition
-    $("#add-msg-btn").click(function () {
-        addMessage($("#message-input").val());
-    });
+    // Start the connection
+    $.connection.hub.start().done(function () {
 
-    // Handle key pressed event to catch Ctrl+Enter keys pressing
-    $(document).keypress(function (event) {
-        // if this is the Enter key - 13 (10 in Chrome) an Ctrl is pressed
-        if ((event.keyCode === 10 || event.keyCode === 13) && event.ctrlKey) {
-            addMessage($("#message-input").val());
-        }
+        $("#add-msg-btn").click(function() {                // Handle a click on the button for message addition
+            sendMessageToServer($("#message-input").val());
+        });
+
+        // Handle key pressed event to catch Ctrl+Enter keys pressing
+        $(document).keypress(function (event) {
+            // if this is the Enter key - 13 (10 in Chrome) an Ctrl is pressed
+            if ((event.keyCode === 10 || event.keyCode === 13) && event.ctrlKey) {
+                sendMessageToServer($("#message-input").val());
+            }
+        });
     });
 
     /**
-     * Add a new message from a user.
+     * Send a new message from a user to server.
      * param messageText String with message.
      */
-    function addMessage(messageText) {
-        if (isEmptyOrSpaces(messageText)) return;   // Disable empty message addition
+    function sendMessageToServer(messageText) {
+        if (isEmptyOrSpaces(messageText)) return;               // Disable empty message addition
 
+        // Scroll game chat only for the current user to the bottom
+        // Use scrollHeight to calculate real height of the div with scroll
+        // http://stackoverflow.com/a/1891142
+        // http://stackoverflow.com/a/2522592/1367313
+        $(".game-chat").animate({ scrollTop: $(".game-chat")[0].scrollHeight }, "slow");
+
+        chat.server.send(curreentPlayerName, messageText);      // Call the Send method on the hub
+    }
+
+    /**
+     * Function that the hub calls to display messages.
+     */
+    chat.client.addMessageToChat = function (playerName, message) {
         // If there is only one child and this is a text, remove it
         if ($(".game-chat")[0].childNodes[0].nodeName === "#text") {
             $(".game-chat").empty();
         }
 
         // Append a new message block to chat
-        $(".game-chat").append(getMessageBlock(messageText));
+        $(".game-chat").append(getMessageBlock(playerName, message));
 
-        // Scroll game chat to the bottom
-        // http://stackoverflow.com/questions/1890995/jquery-scroll-to-bottom-of-page-iframe
-        $(".game-chat").animate({ scrollTop: $(document).height() }, "slow");
-
-        $("#message-input").val("");    // Clear message input
-        $("#message-input").focus();    // And focus on it again
-    }
+        $("#message-input").val("").focus();    // Clear message input and focus on it again
+    };
 
     /**
-     * Get string with HTML code of the message block that is inserted to game chat.
+     * Get string with HTML code of the message block that is inserted to game chat from specified player.
+     * param playerName Name of the player that sends message.
      * param messageText String with player's message.
      * return String with HTML code of the message block.
      */
-    function getMessageBlock(messageText) {
+    function getMessageBlock(playerName, messageText) {
         return "<div class='message'><div class='player-name'>" +
             playerName +
             "</div><div class='message-body'>" +
-            messageText +
+            htmlEncode(messageText) +
             "</div></div>";
     }
 
@@ -86,5 +100,12 @@
      */
     function isEmptyOrSpaces(str) {
         return str === null || str === undefined || str.match(/^( |\n)*$/) !== null;
+    }
+
+    /** 
+     * HTML-encode message to display it as is
+     */
+    function htmlEncode(value) {
+        return $('<div />').text(value).html();
     }
 </script>
