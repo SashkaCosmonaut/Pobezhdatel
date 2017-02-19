@@ -165,6 +165,7 @@
       <LastGenOutput>PobezhdatelDb.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\SimplePublish.pubxml" />
     <None Include="Scripts\JQuery\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\Bootstrap\bootstrap.js" />
@@ -184,6 +185,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="DB\PobezhdatelDbDataContext.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DB\PobezhdatelDb.designer.cs">
       <AutoGen>True</AutoGen>
@@ -212,9 +214,9 @@
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DB\PobezhdatelDb.dbml.layout">
+    <None Include="DB\PobezhdatelDb.dbml.layout">
       <DependentUpon>PobezhdatelDb.dbml</DependentUpon>
-    </Content>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
