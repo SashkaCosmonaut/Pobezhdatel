@@ -87,7 +87,7 @@ namespace Pobezhdatel.DB
 		
 		private int _Id;
 		
-		private string _UserName;
+		private string _PlayerName;
 		
 		private string _Text;
 		
@@ -103,8 +103,8 @@ namespace Pobezhdatel.DB
     partial void OnCreated();
     partial void OnIdChanging(int value);
     partial void OnIdChanged();
-    partial void OnUserNameChanging(string value);
-    partial void OnUserNameChanged();
+    partial void OnPlayerNameChanging(string value);
+    partial void OnPlayerNameChanged();
     partial void OnTextChanging(string value);
     partial void OnTextChanged();
     partial void OnTimestampChanging(System.DateTime value);
@@ -139,22 +139,22 @@ namespace Pobezhdatel.DB
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UserName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string UserName
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_PlayerName", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string PlayerName
 		{
 			get
 			{
-				return this._UserName;
+				return this._PlayerName;
 			}
 			set
 			{
-				if ((this._UserName != value))
+				if ((this._PlayerName != value))
 				{
-					this.OnUserNameChanging(value);
+					this.OnPlayerNameChanging(value);
 					this.SendPropertyChanging();
-					this._UserName = value;
-					this.SendPropertyChanged("UserName");
-					this.OnUserNameChanged();
+					this._PlayerName = value;
+					this.SendPropertyChanged("PlayerName");
+					this.OnPlayerNameChanged();
 				}
 			}
 		}
