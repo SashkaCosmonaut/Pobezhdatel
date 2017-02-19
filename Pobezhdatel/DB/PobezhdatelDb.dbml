@@ -5,6 +5,16 @@
       <Column Name="UserName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="Text" Type="System.String" DbType="NVarChar(1000) NOT NULL" CanBeNull="false" />
       <Column Name="Timestamp" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="RoomId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="T_Room_T_Message" Member="T_Room" ThisKey="RoomId" OtherKey="Id" Type="T_Room" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.T_Rooms" Member="T_Rooms">
+    <Type Name="T_Room">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="T_Room_T_Message" Member="T_Messages" ThisKey="Id" OtherKey="RoomId" Type="T_Message" />
     </Type>
   </Table>
 </Database>

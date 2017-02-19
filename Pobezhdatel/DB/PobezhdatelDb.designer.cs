@@ -33,6 +33,9 @@ namespace Pobezhdatel.DB
     partial void InsertT_Message(T_Message instance);
     partial void UpdateT_Message(T_Message instance);
     partial void DeleteT_Message(T_Message instance);
+    partial void InsertT_Room(T_Room instance);
+    partial void UpdateT_Room(T_Room instance);
+    partial void DeleteT_Room(T_Room instance);
     #endregion
 		
 		public PobezhdatelDbDataContext(string connection) : 
@@ -66,6 +69,14 @@ namespace Pobezhdatel.DB
 				return this.GetTable<T_Message>();
 			}
 		}
+		
+		public System.Data.Linq.Table<T_Room> T_Rooms
+		{
+			get
+			{
+				return this.GetTable<T_Room>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.T_Messages")]
@@ -82,6 +93,10 @@ namespace Pobezhdatel.DB
 		
 		private System.DateTime _Timestamp;
 		
+		private int _RoomId;
+		
+		private EntityRef<T_Room> _T_Room;
+		
     #region Определения метода расширяемости
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -94,10 +109,13 @@ namespace Pobezhdatel.DB
     partial void OnTextChanged();
     partial void OnTimestampChanging(System.DateTime value);
     partial void OnTimestampChanged();
+    partial void OnRoomIdChanging(int value);
+    partial void OnRoomIdChanged();
     #endregion
 		
 		public T_Message()
 		{
+			this._T_Room = default(EntityRef<T_Room>);
 			OnCreated();
 		}
 		
@@ -181,6 +199,64 @@ namespace Pobezhdatel.DB
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoomId", DbType="Int NOT NULL")]
+		public int RoomId
+		{
+			get
+			{
+				return this._RoomId;
+			}
+			set
+			{
+				if ((this._RoomId != value))
+				{
+					if (this._T_Room.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnRoomIdChanging(value);
+					this.SendPropertyChanging();
+					this._RoomId = value;
+					this.SendPropertyChanged("RoomId");
+					this.OnRoomIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="T_Room_T_Message", Storage="_T_Room", ThisKey="RoomId", OtherKey="Id", IsForeignKey=true)]
+		public T_Room T_Room
+		{
+			get
+			{
+				return this._T_Room.Entity;
+			}
+			set
+			{
+				T_Room previousValue = this._T_Room.Entity;
+				if (((previousValue != value) 
+							|| (this._T_Room.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._T_Room.Entity = null;
+						previousValue.T_Messages.Remove(this);
+					}
+					this._T_Room.Entity = value;
+					if ((value != null))
+					{
+						value.T_Messages.Add(this);
+						this._RoomId = value.Id;
+					}
+					else
+					{
+						this._RoomId = default(int);
+					}
+					this.SendPropertyChanged("T_Room");
+				}
+			}
+		}
+		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -199,6 +275,144 @@ namespace Pobezhdatel.DB
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.T_Rooms")]
+	public partial class T_Room : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _Name;
+		
+		private string _Password;
+		
+		private EntitySet<T_Message> _T_Messages;
+		
+    #region Определения метода расширяемости
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnPasswordChanging(string value);
+    partial void OnPasswordChanged();
+    #endregion
+		
+		public T_Room()
+		{
+			this._T_Messages = new EntitySet<T_Message>(new Action<T_Message>(this.attach_T_Messages), new Action<T_Message>(this.detach_T_Messages));
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Password", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Password
+		{
+			get
+			{
+				return this._Password;
+			}
+			set
+			{
+				if ((this._Password != value))
+				{
+					this.OnPasswordChanging(value);
+					this.SendPropertyChanging();
+					this._Password = value;
+					this.SendPropertyChanged("Password");
+					this.OnPasswordChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="T_Room_T_Message", Storage="_T_Messages", ThisKey="Id", OtherKey="RoomId")]
+		public EntitySet<T_Message> T_Messages
+		{
+			get
+			{
+				return this._T_Messages;
+			}
+			set
+			{
+				this._T_Messages.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_T_Messages(T_Message entity)
+		{
+			this.SendPropertyChanging();
+			entity.T_Room = this;
+		}
+		
+		private void detach_T_Messages(T_Message entity)
+		{
+			this.SendPropertyChanging();
+			entity.T_Room = null;
 		}
 	}
 }

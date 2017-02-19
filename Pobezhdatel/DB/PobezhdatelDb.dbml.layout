@@ -2,11 +2,24 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="PobezhdatelDb">
   <DataContextMoniker Name="/PobezhdatelDbDataContext" />
   <nestedChildShapes>
-    <classShape Id="499616a0-ef38-4a85-996e-7c4dafdd9ad7" absoluteBounds="2, 1.125, 2, 1.5785953776041666">
+    <classShape Id="58194ce1-719d-4aaf-bbfa-e62eb1c124f8" absoluteBounds="3.5, 0.875, 2, 1.7708968098958331">
       <DataClassMoniker Name="/PobezhdatelDbDataContext/T_Message" />
       <nestedChildShapes>
-        <elementListCompartment Id="663c4698-14ce-46cd-8777-4188cba68d31" absoluteBounds="2.015, 1.585, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="3210a510-d582-4386-abe9-ce8ca538347f" absoluteBounds="3.515, 1.335, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
+    <classShape Id="7428f39d-e9a3-4336-acd2-1cdb6c9e2bde" absoluteBounds="0.75, 1.125, 2, 1.3862939453125">
+      <DataClassMoniker Name="/PobezhdatelDbDataContext/T_Room" />
+      <nestedChildShapes>
+        <elementListCompartment Id="72831f08-9445-477b-864c-92fbfc0052e3" absoluteBounds="0.765, 1.585, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.75 : 1.81814697265625); (3.5 : 1.81814697265625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/PobezhdatelDbDataContext/T_Room/T_Room_T_Message" />
+      <nodes>
+        <classShapeMoniker Id="7428f39d-e9a3-4336-acd2-1cdb6c9e2bde" />
+        <classShapeMoniker Id="58194ce1-719d-4aaf-bbfa-e62eb1c124f8" />
+      </nodes>
+    </associationConnector>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>
