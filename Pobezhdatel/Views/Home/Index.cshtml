@@ -63,21 +63,21 @@
         $(".game-chat").animate({ scrollTop: $(".game-chat")[0].scrollHeight }, "slow");
 
         chat.server.send(curreentPlayerName, messageText);      // Call the Send method on the hub
+
+        $("#message-input").val("").focus();    // After sending clear message input and focus on it again
     }
 
     /**
      * Function that the hub calls to display messages.
      */
     chat.client.addMessageToChat = function (playerName, message) {
-        // If there is only one child and this is a text, remove it
+        // If there is only one child and this is a text that there are no messages, remove it
         if ($(".game-chat")[0].childNodes[0].nodeName === "#text") {
             $(".game-chat").empty();
         }
 
         // Append a new message block to chat
         $(".game-chat").append(getMessageBlock(playerName, message));
-
-        $("#message-input").val("").focus();    // Clear message input and focus on it again
     };
 
     /**
