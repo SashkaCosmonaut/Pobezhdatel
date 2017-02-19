@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов для изменения сведений,
 // связанных с этой сборкой.
+[assembly: log4net.Config.XmlConfigurator(ConfigFile = "Log4Net.config", Watch = true)]
 [assembly: AssemblyTitle("Pobezhdatel")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
