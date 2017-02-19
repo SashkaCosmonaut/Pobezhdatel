@@ -51,8 +51,8 @@ namespace Pobezhdatel.Models
         /// <returns>True if correct.</returns>
         public bool IsCorrect()
         {
-            return Timestamp > new DateTime(2010, 01, 01) && string.IsNullOrWhiteSpace(PlayerName) &&
-                   string.IsNullOrWhiteSpace(Text);
+            return !(Timestamp < new DateTime(2010, 01, 01) || string.IsNullOrWhiteSpace(PlayerName) ||
+                   string.IsNullOrWhiteSpace(Text));
         }
     }
 }
