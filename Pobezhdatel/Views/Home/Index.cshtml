@@ -1,13 +1,17 @@
 ﻿<div class="container">
     <div class="game-chat-panel">
         <div class="game-info">
-            <b>Перенос строки: </b>Enter<br />
-            <b>Отправка сообщения: </b>Ctrl + Enter<br />
-            <b>Бросок кубов: </b>//XdY, где X - количество кубов,
-            Y - количество граней кубов <br />
-            В одном броске может быть 1-9 кубов с 1-100 гранями (от 1d1 до 9d100).<br />
-            В любом месте текста сообщения может быть сколько угодно бросков.<br />
-            <b>Примеры: </b>//2d6 //3d10 //1d20
+            <p><b>Перенос строки: </b>Enter<br /></p>
+            <p><b>Отправка сообщения: </b>Ctrl + Enter<br /></p>
+            <p>
+                <b>Бросок кубов: </b>//XdY, где X - количество кубов,
+                Y - количество граней кубов <br />
+            </p>
+            <p>
+                В одном броске может быть 1-9 кубов с 1-100 гранями (от 1d1 до 9d100).<br />
+                В любом месте текста сообщения может быть сколько угодно бросков.<br />
+                <b>Примеры: </b>//2d6 //3d10 //1d20
+            </p>
         </div>
         <div class="game-chat">
             Пока что нет сообщений...
@@ -75,7 +79,6 @@
     function sendMessageToServer(messageText) {
         if (isEmptyOrSpaces(messageText)) return;               // Disable empty message addition
 
-
         goToLastMessage();
 
         chat.server.send(curreentPlayerName, messageText);      // Call the Send method on the hub
@@ -123,7 +126,7 @@
                     "<div class='player-name'>" + playerName + "</div>" +
                     "<div class='message'>" +
                         "<div class='message-body'>" + htmlEncode(messageText) + "</div>" +
-                        (dicesRollResultText !== undefined ? "<div class='message-dices'>" + dicesRollResultText + "</div>" : "") +
+                        (!isEmptyOrSpaces(dicesRollResultText) ? "<div class='message-dices'>" + dicesRollResultText + "</div>" : "") +
                     "</div>" +
                 "</div>";
     }
@@ -135,7 +138,7 @@
         return str === null || str === undefined || str.match(/^( |\n)*$/) !== null;
     }
 
-    /** 
+    /**
      * HTML-encode message to display it as is
      */
     function htmlEncode(value) {
