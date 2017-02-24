@@ -38,10 +38,15 @@
         type: "POST",
         async: true,
         success: function (messagesString) {
+            if (messagesString !== "[]")
+                clearDefaultString();
+
             // Parse messages and add them to container
             $.each(JSON.parse(messagesString), function () {
                 addMessageToChat(this.PlayerName, this.Text, this.DicesRollResult);
             });
+
+            goToLastMessage();
         }
     });
 
@@ -70,11 +75,8 @@
     function sendMessageToServer(messageText) {
         if (isEmptyOrSpaces(messageText)) return;               // Disable empty message addition
 
-        // Scroll game chat only for the current user to the bottom
-        // Use scrollHeight to calculate real height of the div with scroll
-        // http://stackoverflow.com/a/1891142
-        // http://stackoverflow.com/a/2522592/1367313
-        $(".game-chat").animate({ scrollTop: $(".game-chat")[0].scrollHeight }, "slow");
+
+        goToLastMessage();
 
         chat.server.send(curreentPlayerName, messageText);      // Call the Send method on the hub
 
@@ -85,13 +87,19 @@
      * Function that the hub calls to display messages.
      */
     chat.client.addMessageToChat = function (playerName, message, dicesRollResult) {
-        // If there is only one child and this is a text that there are no messages, remove it
-        if ($(".game-chat")[0].childNodes[0].nodeName === "#text") {
-            $(".game-chat").empty();
-        }
-
+        clearDefaultString();
         addMessageToChat(playerName, message, dicesRollResult);
     };
+
+    /**
+     * Scroll game chat only for the current user to the bottom
+     * Use scrollHeight to calculate real height of the div with scroll
+     * http://stackoverflow.com/a/1891142
+     * http://stackoverflow.com/a/2522592/1367313
+     */
+    function goToLastMessage() {
+        $(".game-chat").animate({ scrollTop: $(".game-chat")[0].scrollHeight }, "slow");
+    }
 
     /**
      * Append a new message block to chat container.
@@ -132,5 +140,15 @@
      */
     function htmlEncode(value) {
         return $('<div />').text(value).html();
+    }
+
+    /**
+     * Clear default string that tells that there is no messages.
+     */
+    function clearDefaultString() {
+        // If there is only one child and this is a text that there are no messages, remove it.
+        if ($(".game-chat")[0].childNodes[0].nodeName === "#text") {
+            $(".game-chat").empty();
+        }
     }
 </script>
