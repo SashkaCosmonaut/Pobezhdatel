@@ -46,7 +46,7 @@ namespace Pobezhdatel.Hubs
 
             try
             {
-                var matches = Regex.Matches(message, "//[1-9]d(100|[1-9][0-9]?)");
+                var matches = Regex.Matches(message, "//[1-9]?(d|к)(100|[1-9][0-9]?)");
 
                 // Roll every dice roll request and aggreagte all results to one string
                 return matches.Cast<Match>()
@@ -73,10 +73,22 @@ namespace Pobezhdatel.Hubs
 
             try
             {
+                var numberOfDices = 1;
+                int numberOfEdges = 1;
+
                 // Parse request
-                var requestParts = diceRequest.TrimStart('/').Split('d');
-                var numberOfDices = int.Parse(requestParts[0]);
-                var numberOfEdges = int.Parse(requestParts[1]);
+                var requestParts = diceRequest.TrimStart('/').Split(new [] {'d', 'к'}, StringSplitOptions.RemoveEmptyEntries);
+
+                // If there is more than one dice, add 1 to number of edges for random number generation
+                if (requestParts.Length > 1)
+                {
+                    numberOfDices = int.Parse(requestParts[0]);
+                    numberOfEdges += int.Parse(requestParts[1]);
+                }
+                else
+                {
+                    numberOfEdges += int.Parse(requestParts[0]);
+                }
 
                 var random = new Random(Guid.NewGuid().GetHashCode());
                 var result = diceRequest + ": ";
