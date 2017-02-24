@@ -6,3 +6,4 @@ Pobezhdatel/Pobezhdatel.csproj.user
 Pobezhdatel/ConnectionStrings.config
 *.pubxml
 Pobezhdatel/log.txt
+*.TMP

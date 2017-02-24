@@ -53,21 +53,20 @@
   resize: none;
   margin-right: 1em;
 }
-/* Container for the message text and player name. */
-.message {
+/* Container for the message text, dices and player name. */
+.message-container {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  text-align: left;
-  padding-bottom: 0.5em;
   width: 100%;
-  margin-bottom: 1em;
   border-bottom: solid 1px #e1e1e1;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
 }
 /* Remove border of the last message. */
-.message:last-of-type {
+.message-container:last-of-type {
   border: none;
 }
 /* Properties of player name in a message.*/
@@ -78,9 +77,24 @@
   min-width: 70px;
   width: 70px;
 }
-/* Properties of message text.*/
-.message-body {
+/* Properties of message.*/
+.message {
   flex-grow: 1;
   margin-left: 20px;
   white-space: pre-wrap;
+}
+/* Properties of message text.*/
+.message-body {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+/* Properties of dices field of a message.*/
+.message-dices {
+  border: solid 1px #ddd;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  margin: 15px 0 10px 0;
+  text-align: left;
 }

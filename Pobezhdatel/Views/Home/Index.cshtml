@@ -3,10 +3,11 @@
         <div class="game-info">
             <b>Перенос строки: </b>Enter<br />
             <b>Отправка сообщения: </b>Ctrl + Enter<br />
-            <b>Кинуть куб: </b>//XdY, где X - количество кубов,
+            <b>Бросок кубов: </b>//XdY, где X - количество кубов,
             Y - количество граней кубов <br />
-            <b>Примеры: </b>//2d6 //3d10 //1d20 <br />
-            В любом месте текста сообщения может быть сколько угодно кубов.
+            В одном броске может быть 1-9 кубов с 1-100 гранями (от 1d1 до 9d100).<br />
+            В любом месте текста сообщения может быть сколько угодно бросков.<br />
+            <b>Примеры: </b>//2d6 //3d10 //1d20
         </div>
         <div class="game-chat">
             Пока что нет сообщений...
@@ -39,7 +40,7 @@
         success: function (messagesString) {
             // Parse messages and add them to container
             $.each(JSON.parse(messagesString), function () {
-                addMessageToChat(this.PlayerName, this.Text);
+                addMessageToChat(this.PlayerName, this.Text, this.DicesRollResult);
             });
         }
     });
@@ -83,34 +84,40 @@
     /**
      * Function that the hub calls to display messages.
      */
-    chat.client.addMessageToChat = function (playerName, message) {
+    chat.client.addMessageToChat = function (playerName, message, dicesRollResult) {
         // If there is only one child and this is a text that there are no messages, remove it
         if ($(".game-chat")[0].childNodes[0].nodeName === "#text") {
             $(".game-chat").empty();
         }
 
-        addMessageToChat(playerName, message);
+        addMessageToChat(playerName, message, dicesRollResult);
     };
 
     /**
      * Append a new message block to chat container.
+     * param playerName Name of the player that sends message.
+     * param messageText String with player's message.
+     * param dicesRollResult Text with result of dices roll.
      */
-    function addMessageToChat(playerName, message) {
-        $(".game-chat").append(getMessageBlock(playerName, message));
+    function addMessageToChat(playerName, message, dicesRollResult) {
+        $(".game-chat").append(getMessageBlock(playerName, message, dicesRollResult));
     }
 
     /**
      * Get string with HTML code of the message block that is inserted to game chat from specified player.
      * param playerName Name of the player that sends message.
      * param messageText String with player's message.
+     * param dicesRollText Text with result of dices roll.
      * return String with HTML code of the message block.
      */
-    function getMessageBlock(playerName, messageText) {
-        return "<div class='message'><div class='player-name'>" +
-            playerName +
-            "</div><div class='message-body'>" +
-            htmlEncode(messageText) +
-            "</div></div>";
+    function getMessageBlock(playerName, messageText, dicesRollResultText) {
+        return "<div class='message-container'>" +
+                    "<div class='player-name'>" + playerName + "</div>" +
+                    "<div class='message'>" +
+                        "<div class='message-body'>" + htmlEncode(messageText) + "</div>" +
+                        (dicesRollResultText !== undefined ? "<div class='message-dices'>" + dicesRollResultText + "</div>" : "") +
+                    "</div>" +
+                "</div>";
     }
 
     /**

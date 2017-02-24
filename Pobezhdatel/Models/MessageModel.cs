@@ -28,6 +28,11 @@ namespace Pobezhdatel.Models
         public string Text { get; set; }
 
         /// <summary>
+        /// String with results of dices rolling.
+        /// </summary>
+        public string DicesRollResult { get; set; }
+
+        /// <summary>
         /// Create an empty message.
         /// </summary>
         public MessageModel() { }
@@ -38,12 +43,14 @@ namespace Pobezhdatel.Models
         /// <param name="timestamp">Date and time of the message sending.</param>
         /// <param name="playerName">Name of player that sent the message.</param>
         /// <param name="text">Text of the message.</param>
+        /// <param name="dicesRollResult">String with results of dices rolling.</param>
         /// <param name="id">Id of the message (used only for DB).</param>
-        public MessageModel(DateTime timestamp, string playerName, string text, int id = 0)
+        public MessageModel(DateTime timestamp, string playerName, string text, string dicesRollResult, int id = 0)
         {
             Timestamp = timestamp;
             PlayerName = playerName;
             Text = text;
+            DicesRollResult = dicesRollResult;
             Id = id;
         }
 

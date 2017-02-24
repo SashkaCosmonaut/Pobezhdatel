@@ -26,9 +26,11 @@ namespace Pobezhdatel.Hubs
         {
             Log.Debug("Send");
 
-            Clients.All.addMessageToChat(playerName, message);
+            var dicesRoll = "qwe";
 
-            DBModel.AddMessage(new MessageModel(DateTime.Now, playerName, message));
+            DBModel.AddMessage(new MessageModel(DateTime.Now, playerName, message, dicesRoll));
+
+            Clients.All.addMessageToChat(playerName, message, dicesRoll);
         }
     }
 }

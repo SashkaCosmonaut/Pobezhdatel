@@ -47,6 +47,7 @@ namespace Pobezhdatel.Models
                                                      Text = message.Text,
                                                      Timestamp = message.Timestamp,
                                                      PlayerName = message.PlayerName,
+                                                     DicesRollResult = message.DicesRollResult,
                                                      RoomId = 1         // TODO: hardcoded for now
                                                  });
 
@@ -75,7 +76,7 @@ namespace Pobezhdatel.Models
                 using (var db = new PobezhdatelDbDataContext())
                 {
                     return db.T_Messages
-                        .Select(q => new MessageModel(q.Timestamp, q.PlayerName, q.Text, q.Id))
+                        .Select(q => new MessageModel(q.Timestamp, q.PlayerName, q.Text, q.DicesRollResult, q.Id))
                         .ToArray();
                 }
             }

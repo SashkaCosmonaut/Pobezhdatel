@@ -2,23 +2,23 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="PobezhdatelDb">
   <DataContextMoniker Name="/PobezhdatelDbDataContext" />
   <nestedChildShapes>
-    <classShape Id="7952121c-9722-4fc5-a9ed-e79f6bbaea00" absoluteBounds="3.5, 0.875, 2, 1.7708968098958331">
+    <classShape Id="c8d39b1b-85b4-432d-a5ae-8bbe1547aff6" absoluteBounds="3.5, 0.875, 2, 1.9631982421875">
       <DataClassMoniker Name="/PobezhdatelDbDataContext/T_Message" />
       <nestedChildShapes>
-        <elementListCompartment Id="fb18dd6a-ca84-4a8e-9312-91e4aac1827e" absoluteBounds="3.515, 1.335, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="81f6e542-8e1b-4ae8-9e22-fdb7f9497cfe" absoluteBounds="3.515, 1.335, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="03c91990-5a1e-478e-beb5-64c97e4f8fae" absoluteBounds="0.75, 1.125, 2, 1.3862939453125">
+    <classShape Id="76bf97de-15c0-444d-9e3d-2b7c5ab104f9" absoluteBounds="0.75, 1.25, 2, 1.3862939453125">
       <DataClassMoniker Name="/PobezhdatelDbDataContext/T_Room" />
       <nestedChildShapes>
-        <elementListCompartment Id="497e4a22-63b0-4e54-a023-313587010670" absoluteBounds="0.765, 1.585, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="632f024b-7221-4f09-bb30-44a74459eb72" absoluteBounds="0.765, 1.71, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <associationConnector edgePoints="[(2.75 : 1.81814697265625); (3.5 : 1.81814697265625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+    <associationConnector edgePoints="[(2.75 : 1.94314697265625); (3.5 : 1.94314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
       <AssociationMoniker Name="/PobezhdatelDbDataContext/T_Room/T_Room_T_Message" />
       <nodes>
-        <classShapeMoniker Id="03c91990-5a1e-478e-beb5-64c97e4f8fae" />
-        <classShapeMoniker Id="7952121c-9722-4fc5-a9ed-e79f6bbaea00" />
+        <classShapeMoniker Id="76bf97de-15c0-444d-9e3d-2b7c5ab104f9" />
+        <classShapeMoniker Id="c8d39b1b-85b4-432d-a5ae-8bbe1547aff6" />
       </nodes>
     </associationConnector>
   </nestedChildShapes>

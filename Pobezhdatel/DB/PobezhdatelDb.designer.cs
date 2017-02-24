@@ -95,6 +95,8 @@ namespace Pobezhdatel.DB
 		
 		private int _RoomId;
 		
+		private string _DicesRollResult;
+		
 		private EntityRef<T_Room> _T_Room;
 		
     #region Определения метода расширяемости
@@ -111,6 +113,8 @@ namespace Pobezhdatel.DB
     partial void OnTimestampChanged();
     partial void OnRoomIdChanging(int value);
     partial void OnRoomIdChanged();
+    partial void OnDicesRollResultChanging(string value);
+    partial void OnDicesRollResultChanged();
     #endregion
 		
 		public T_Message()
@@ -219,6 +223,26 @@ namespace Pobezhdatel.DB
 					this._RoomId = value;
 					this.SendPropertyChanged("RoomId");
 					this.OnRoomIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DicesRollResult", DbType="NVarChar(200)")]
+		public string DicesRollResult
+		{
+			get
+			{
+				return this._DicesRollResult;
+			}
+			set
+			{
+				if ((this._DicesRollResult != value))
+				{
+					this.OnDicesRollResultChanging(value);
+					this.SendPropertyChanging();
+					this._DicesRollResult = value;
+					this.SendPropertyChanged("DicesRollResult");
+					this.OnDicesRollResultChanged();
 				}
 			}
 		}
