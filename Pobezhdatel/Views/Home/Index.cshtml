@@ -1,8 +1,8 @@
 ﻿<div class="container">
     <div class="game-chat-panel">
         <div class="game-info">
-            <p><b>Перенос строки: </b>Enter<br /></p>
-            <p><b>Отправка сообщения: </b>Ctrl + Enter<br /></p>
+            <p><b>Перенос строки: </b>Shift + Enter<br /></p>
+            <p><b>Отправка сообщения: </b>Enter<br /></p>
             <p>
                 <b>Бросок кубов: </b>//XdY, где X - количество кубов,
                 Y - количество граней кубов <br />
@@ -20,16 +20,32 @@
 
     <div class="main-chat-input">
         <textarea id="message-input" class="form-control" rows="7"></textarea>
-        <button id="add-msg-btn" type="button" class="btn btn-default btn-lg">
-            <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
-        </button>
+        <div class="input-buttons">
+            <button id="add-msg-btn" type="button" class="btn btn-default btn-lg">
+                <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+                Отправить
+            </button>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="sending-method" id="direct" value="direct" checked>
+                    Enter - отправка, Shift + Enter - перенос.
+                </label>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="sending-method" id="reversed" value="reversed">
+                    Shift + Enter - отправка, Enter - перенос.
+                </label>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
     // At first ask current player's name, encode it and save
     var curreentPlayerName = htmlEncode(prompt("Введите Ваше имя:", ""));
-    var chat = $.connection.chatHub;        // Reference the auto-generated proxy for the hub
+    var chat = $.connection.chatHub;    // Reference the auto-generated proxy for the hub
+    var directSendingMethod = true;     // Direct (not reversed) sending method (Enter - send, Shift + Enter - new line) is default
 
     // If there is no name or it is empty, then set Anonymous name
     if (isEmptyOrSpaces(curreentPlayerName)) {
@@ -63,14 +79,28 @@
             sendMessageToServer($("#message-input").val());
         });
 
-        // Handle key pressed event to catch Ctrl+Enter keys pressing
+        // Handle key pressed event to catch Shift+Enter keys pressing
         $(document).keypress(function (event) {
-            // if this is the Enter key - 13 (10 in Chrome) an Ctrl is pressed
-            if ((event.keyCode === 10 || event.keyCode === 13) && event.ctrlKey) {
+            // if this is the Enter key - 13 (10 in Chrome) and if sending method isn't direct and Shift is pressed
+            if ((event.keyCode === 10 || event.keyCode === 13) && (isDirectSendingMethod() || isReversedSendingPethod())) {
                 sendMessageToServer($("#message-input").val());
             }
         });
     });
+
+    /**
+     * Check is current sending method direct (Enter - send, Shift + Enter - new line)
+     */
+    function isDirectSendingMethod() {
+        return directSendingMethod && !event.shiftKey;
+    }
+
+    /**
+     * Check is current sending method direct (Shift + Enter - send, Enter - new line)
+     */
+    function isReversedSendingPethod() {
+        return !directSendingMethod && event.shiftKey;
+    }
 
     /**
      * Send a new message from a user to server.
@@ -83,7 +113,12 @@
 
         chat.server.send(curreentPlayerName, messageText);      // Call the Send method on the hub
 
-        $("#message-input").val("").focus();    // After sending clear message input and focus on it again
+        // After sending clear message input and focus on it again
+        // A little delay is required to clear the input field after sending
+        setTimeout(function() {
+                $("#message-input").val("").focus();
+            },
+            10);
     }
 
     /**
@@ -93,6 +128,16 @@
         clearDefaultString();
         addMessageToChat(playerName, message, dicesRollResult);
     };
+
+    // Handle messages sending method changing
+    $("input[type=radio][name=sending-method]").change(function () {
+        if (this.value === "direct") {
+            directSendingMethod = true;
+        }
+        else if (this.value === "reversed") {
+            directSendingMethod = false;
+        }
+    });
 
     /**
      * Scroll game chat only for the current user to the bottom

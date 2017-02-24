@@ -30,28 +30,20 @@
   border-radius: 4px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
-/* On small screen info panel goes up.*/
-@media all and (max-width: 700px) {
-  .game-info {
-    width: 100%;
-    min-height: 170px;
-    height: 0;
-    margin-left: 0;
-    margin-bottom: 1em;
-  }
-}
 /* Properties of main input field and button. */
 .main-chat-input {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   width: 100%;
 }
 /* Properties of chat textarea. */
 .main-chat-input textarea {
+  flex-grow: 1;
+  width: 0;
   resize: none;
-  margin-right: 1em;
 }
 /* Container for the message text, dices and player name. */
 .message-container {
@@ -97,4 +89,29 @@
   padding: 10px;
   margin: 15px 0 10px 0;
   text-align: left;
+}
+/* Container for buttons of text input and settings.*/
+.input-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 200px;
+  margin-left: 1em;
+  padding-left: 15px;
+}
+/* On small screen info panel goes up.*/
+@media all and (max-width: 700px) {
+  .game-info {
+    width: 100%;
+    min-height: 260px;
+    height: 0;
+    margin-left: 0;
+    margin-bottom: 1em;
+  }
+  .input-buttons {
+    width: 100%;
+    margin-top: 1em;
+    padding: 0;
+    margin-left: 0;
+  }
 }
