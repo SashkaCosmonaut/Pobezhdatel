@@ -9,7 +9,7 @@ namespace Pobezhdatel.Controllers
     /// <summary>
     /// Controller for chat room.
     /// </summary>
-    public class RoomController : Controller
+    public class RoomController : BaseController
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(RoomController));
 
@@ -26,6 +26,11 @@ namespace Pobezhdatel.Controllers
         {
             Log.Debug("Index");
 
+            CheckCurrentGameModel();
+
+            ViewBag.PlayerName = CurrentGameModel.PlayerName;
+            ViewBag.RoomName = CurrentGameModel.RoomName;
+
             return View();
         }
 
@@ -36,6 +41,8 @@ namespace Pobezhdatel.Controllers
         public string GetMessages()
         {
             Log.Debug("GetMessages");
+
+            CheckCurrentGameModel();
 
             return JsonConvert.SerializeObject(DBModel.GetMessages());
         }

@@ -8,7 +8,7 @@ namespace Pobezhdatel.Controllers
     /// <summary>
     /// Controller for main home page of the application.
     /// </summary>
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(HomeController));
 
@@ -36,6 +36,8 @@ namespace Pobezhdatel.Controllers
             try
             {
                 if (!ModelState.IsValid) return View("Index", model);
+
+                CurrentGameModel = model;
 
                 return RedirectToAction("Index", "Room");
             }
