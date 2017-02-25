@@ -26,7 +26,9 @@ namespace Pobezhdatel.Controllers
         {
             Log.Debug("Index");
 
-            CheckCurrentGameModel();
+            // Check that player is logged in
+            if (CurrentGameModel == null)
+                return RedirectToAction("Index", "Home");
 
             ViewBag.PlayerName = CurrentGameModel.PlayerName;
             ViewBag.RoomName = CurrentGameModel.RoomName;
@@ -42,9 +44,8 @@ namespace Pobezhdatel.Controllers
         {
             Log.Debug("GetMessages");
 
-            CheckCurrentGameModel();
-
-            return JsonConvert.SerializeObject(DBModel.GetMessages());
+            // Check that player is logged in
+            return CurrentGameModel != null ? JsonConvert.SerializeObject(DBModel.GetMessages()) : "[]";
         }
     }
 }
