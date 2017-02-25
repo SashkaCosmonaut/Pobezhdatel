@@ -99,6 +99,21 @@
   margin-left: 1em;
   padding-left: 15px;
 }
+/* Container for login form. */
+.login-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+/* Preferences of login form. */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+}
+.login-form button {
+  align-self: center;
+}
 /* On small screen info panel goes up.*/
 @media all and (max-width: 700px) {
   .game-info {
