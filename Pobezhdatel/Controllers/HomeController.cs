@@ -35,7 +35,7 @@ namespace Pobezhdatel.Controllers
 
             try
             {
-                if (!ModelState.IsValid) return View(model);
+                if (!ModelState.IsValid) return View("Index", model);
 
                 return RedirectToAction("Index", "Room");
             }
