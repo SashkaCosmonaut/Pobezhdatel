@@ -29,7 +29,7 @@ namespace Pobezhdatel.Controllers
         /// <param name="model">Data from login form.</param>
         /// <returns>Room view or current view with errors.</returns>
         [HttpPost]
-        public ActionResult LogIn(LoginModel model)
+        public ActionResult LogIn(GameModel model)
         {
             Log.Debug("LogIn");
 

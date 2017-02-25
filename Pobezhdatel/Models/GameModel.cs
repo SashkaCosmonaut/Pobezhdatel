@@ -3,9 +3,9 @@
 namespace Pobezhdatel.Models
 {
     /// <summary>
-    /// Simple login model.
+    /// Simple model of game settings.
     /// </summary>
-    public class LoginModel
+    public class GameModel
     {
         /// <summary>
         /// Name of created room or room to log in
