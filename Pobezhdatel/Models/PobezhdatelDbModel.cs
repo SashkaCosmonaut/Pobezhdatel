@@ -42,13 +42,18 @@ namespace Pobezhdatel.Models
             {
                 using (var db = new PobezhdatelDbDataContext())
                 {
+                    // Find room in DB
+                    var dbRoom = db.T_Rooms.SingleOrDefault(q => q.Name == message.RoomName);
+
+                    if (dbRoom == null) return false;
+
                     db.T_Messages.InsertOnSubmit(new T_Message
                                                  {
                                                      Text = message.Text,
                                                      Timestamp = message.Timestamp,
                                                      PlayerName = message.PlayerName,
                                                      DicesRollResult = message.DicesRollResult,
-                                                     RoomId = 1         // TODO: hardcoded for now
+                                                     T_Room = dbRoom
                                                  });
 
                     db.SubmitChanges();
@@ -66,8 +71,9 @@ namespace Pobezhdatel.Models
         /// <summary>
         /// Get all existed messages from DB.
         /// </summary>
+        /// <param name="roomName">Current game room name.</param>
         /// <returns>Array of message models from DB.</returns>
-        public MessageModel[] GetMessages()
+        public MessageModel[] GetMessages(string roomName)
         {
             Log.Debug("GetMessages");
 
@@ -75,9 +81,13 @@ namespace Pobezhdatel.Models
             {
                 using (var db = new PobezhdatelDbDataContext())
                 {
-                    return db.T_Messages
-                        .Select(q => new MessageModel(q.Timestamp, q.PlayerName, q.Text, q.DicesRollResult, q.Id))
-                        .ToArray();
+                    return
+                        db.T_Messages.Where(q => q.T_Room.Name == roomName)
+                            .Select(
+                                q =>
+                                    new MessageModel(q.Timestamp, q.T_Room.Name, q.PlayerName, q.Text, q.DicesRollResult,
+                                        q.Id))
+                            .ToArray();
                 }
             }
             catch (Exception ex)

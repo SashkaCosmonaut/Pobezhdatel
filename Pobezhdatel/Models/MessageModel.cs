@@ -18,6 +18,11 @@ namespace Pobezhdatel.Models
         public DateTime Timestamp { get; set; }
 
         /// <summary>
+        /// Name of the room where game is played.
+        /// </summary>
+        public string RoomName { get; set; }
+
+        /// <summary>
         /// Name of player that sent the message.
         /// </summary>
         public string PlayerName { get; set; }
@@ -41,13 +46,15 @@ namespace Pobezhdatel.Models
         /// Create a specified message.
         /// </summary>
         /// <param name="timestamp">Date and time of the message sending.</param>
+        /// <param name="roomName">Name of the room where game is played.</param>
         /// <param name="playerName">Name of player that sent the message.</param>
         /// <param name="text">Text of the message.</param>
         /// <param name="dicesRollResult">String with results of dices rolling.</param>
         /// <param name="id">Id of the message (used only for DB).</param>
-        public MessageModel(DateTime timestamp, string playerName, string text, string dicesRollResult, int id = 0)
+        public MessageModel(DateTime timestamp, string roomName, string playerName, string text, string dicesRollResult, int id = 0)
         {
             Timestamp = timestamp;
+            RoomName = roomName;
             PlayerName = playerName;
             Text = text;
             DicesRollResult = dicesRollResult;
@@ -60,8 +67,8 @@ namespace Pobezhdatel.Models
         /// <returns>True if correct.</returns>
         public bool IsCorrect()
         {
-            return !(Timestamp < new DateTime(2010, 01, 01) || string.IsNullOrWhiteSpace(PlayerName) ||
-                   string.IsNullOrWhiteSpace(Text));
+            return !(Timestamp < new DateTime(2010, 01, 01) || string.IsNullOrWhiteSpace(RoomName) ||
+                     string.IsNullOrWhiteSpace(PlayerName) || string.IsNullOrWhiteSpace(Text));
         }
     }
 }

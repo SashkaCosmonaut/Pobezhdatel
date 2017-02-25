@@ -111,7 +111,8 @@
 
         goToLastMessage();
 
-        chat.server.send(curreentPlayerName, messageText);      // Call the Send method on the hub
+        // Call the Send method on the hub, first parameter is current room name
+        chat.server.send("@ViewBag.RoomName", curreentPlayerName, messageText);
 
         // After sending clear message input and focus on it again
         // A little delay is required to clear the input field after sending

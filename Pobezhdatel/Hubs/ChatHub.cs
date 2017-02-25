@@ -22,15 +22,16 @@ namespace Pobezhdatel.Hubs
         /// <summary>
         /// Send a message to the main game chat.
         /// </summary>
+        /// <param name="roomName">Name of current room.</param>
         /// <param name="playerName">Name of the player.</param>
         /// <param name="message">Player's message.</param>
-        public void Send(string playerName, string message)
+        public void Send(string roomName, string playerName, string message)
         {
             Log.Debug("Send");
 
             var dicesRoll = DiceRoll(message);
 
-            DBModel.AddMessage(new MessageModel(DateTime.Now, playerName, message, dicesRoll));
+            DBModel.AddMessage(new MessageModel(DateTime.Now, roomName, playerName, message, dicesRoll));
 
             Clients.All.addMessageToChat(playerName, message, dicesRoll);
         }

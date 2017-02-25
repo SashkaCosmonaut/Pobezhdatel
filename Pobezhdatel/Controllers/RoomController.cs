@@ -44,8 +44,10 @@ namespace Pobezhdatel.Controllers
         {
             Log.Debug("GetMessages");
 
-            // Check that player is logged in
-            return CurrentGameModel != null ? JsonConvert.SerializeObject(DBModel.GetMessages()) : "[]";
+            // Check that player is logged in and take messages for current room
+            return CurrentGameModel != null
+                ? JsonConvert.SerializeObject(DBModel.GetMessages(CurrentGameModel.RoomName))
+                : "[]";
         }
     }
 }
