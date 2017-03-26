@@ -84,6 +84,7 @@
             // if this is the Enter key - 13 (10 in Chrome) and if sending method isn't direct and Shift is pressed
             if ((event.keyCode === 10 || event.keyCode === 13) && (isDirectSendingMethod() || isReversedSendingPethod())) {
                 sendMessageToServer($("#message-input").val());
+                return false;
             }
         });
     });
@@ -113,19 +114,13 @@
 
         // Call the Send method on the hub, first parameter is current room name
         chat.server.send("@ViewBag.RoomName", curreentPlayerName, messageText);
-
-        // After sending clear message input and focus on it again
-        // A little delay is required to clear the input field after sending
-        setTimeout(function() {
-                $("#message-input").val("").focus();
-            },
-            10);
     }
 
     /**
      * Function that the hub calls to display messages.
      */
     chat.client.addMessageToChat = function (playerName, message, dicesRollResult) {
+        clearMessageInput();
         clearDefaultString();
         addMessageToChat(playerName, message, dicesRollResult);
     };
@@ -199,5 +194,12 @@
         if ($(".game-chat")[0].childNodes[0].nodeName === "#text") {
             $(".game-chat").empty();
         }
+    }
+
+    /*
+     * Сlear message input and focus on it again
+     */
+    function clearMessageInput() {
+        $("#message-input").val("").focus();
     }
 </script>

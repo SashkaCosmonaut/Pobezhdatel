@@ -31,9 +31,11 @@ namespace Pobezhdatel.Hubs
 
             var dicesRoll = DiceRoll(message);
 
-            DBModel.AddMessage(new MessageModel(DateTime.Now, roomName, playerName, message, dicesRoll));
-
-            Clients.All.addMessageToChat(playerName, message, dicesRoll);
+            // If message succesfully sent to DB, show it in the chat
+            if (DBModel.AddMessage(new MessageModel(DateTime.Now, roomName, playerName, message, dicesRoll)))
+            {
+                Clients.All.addMessageToChat(playerName, message, dicesRoll);
+            }
         }
 
         /// <summary>

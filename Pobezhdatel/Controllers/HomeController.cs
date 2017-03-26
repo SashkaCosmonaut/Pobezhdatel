@@ -39,6 +39,8 @@ namespace Pobezhdatel.Controllers
 
                 CurrentGameModel = model;
 
+                // TODO: Add room if not existed or get it
+
                 return RedirectToAction("Index", "Room");
             }
             catch (Exception ex)
