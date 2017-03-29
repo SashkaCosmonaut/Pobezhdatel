@@ -45,7 +45,16 @@ namespace Pobezhdatel.Models
                     // Find room in DB
                     var dbRoom = db.T_Rooms.SingleOrDefault(q => q.Name == message.RoomName);
 
-                    if (dbRoom == null) return false;
+                    if (dbRoom == null)     // If such room doesn't exist, create it
+                    {
+                        dbRoom = new T_Room
+                        {
+                            Name = message.RoomName,
+                            Password = ""
+                        };
+
+                        db.T_Rooms.InsertOnSubmit(dbRoom);
+                    }
 
                     db.T_Messages.InsertOnSubmit(new T_Message
                                                  {
