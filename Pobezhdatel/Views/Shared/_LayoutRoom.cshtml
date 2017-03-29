@@ -1,0 +1,12 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@* Section with room name and player name for the navbar *@
+@section GameParameters
+{
+    <p class="navbar-text active">@ViewBag.RoomName</p>
+    <p class="navbar-text navbar-right">@ViewBag.PlayerName</p>
+}
+
+@RenderBody()
