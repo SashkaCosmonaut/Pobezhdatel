@@ -93,9 +93,9 @@ namespace Pobezhdatel.DB
 		
 		private System.DateTime _Timestamp;
 		
-		private int _RoomId;
-		
 		private string _DicesRollResult;
+		
+		private int _RoomId;
 		
 		private EntityRef<T_Room> _T_Room;
 		
@@ -111,10 +111,10 @@ namespace Pobezhdatel.DB
     partial void OnTextChanged();
     partial void OnTimestampChanging(System.DateTime value);
     partial void OnTimestampChanged();
-    partial void OnRoomIdChanging(int value);
-    partial void OnRoomIdChanged();
     partial void OnDicesRollResultChanging(string value);
     partial void OnDicesRollResultChanged();
+    partial void OnRoomIdChanging(int value);
+    partial void OnRoomIdChanged();
     #endregion
 		
 		public T_Message()
@@ -203,6 +203,26 @@ namespace Pobezhdatel.DB
 			}
 		}
 		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DicesRollResult", DbType="NVarChar(200)")]
+		public string DicesRollResult
+		{
+			get
+			{
+				return this._DicesRollResult;
+			}
+			set
+			{
+				if ((this._DicesRollResult != value))
+				{
+					this.OnDicesRollResultChanging(value);
+					this.SendPropertyChanging();
+					this._DicesRollResult = value;
+					this.SendPropertyChanged("DicesRollResult");
+					this.OnDicesRollResultChanged();
+				}
+			}
+		}
+		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_RoomId", DbType="Int NOT NULL")]
 		public int RoomId
 		{
@@ -223,26 +243,6 @@ namespace Pobezhdatel.DB
 					this._RoomId = value;
 					this.SendPropertyChanged("RoomId");
 					this.OnRoomIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DicesRollResult", DbType="NVarChar(200)")]
-		public string DicesRollResult
-		{
-			get
-			{
-				return this._DicesRollResult;
-			}
-			set
-			{
-				if ((this._DicesRollResult != value))
-				{
-					this.OnDicesRollResultChanging(value);
-					this.SendPropertyChanging();
-					this._DicesRollResult = value;
-					this.SendPropertyChanged("DicesRollResult");
-					this.OnDicesRollResultChanged();
 				}
 			}
 		}
@@ -312,8 +312,6 @@ namespace Pobezhdatel.DB
 		
 		private string _Name;
 		
-		private string _Password;
-		
 		private EntitySet<T_Message> _T_Messages;
 		
     #region Определения метода расширяемости
@@ -324,8 +322,6 @@ namespace Pobezhdatel.DB
     partial void OnIdChanged();
     partial void OnNameChanging(string value);
     partial void OnNameChanged();
-    partial void OnPasswordChanging(string value);
-    partial void OnPasswordChanged();
     #endregion
 		
 		public T_Room()
@@ -370,26 +366,6 @@ namespace Pobezhdatel.DB
 					this._Name = value;
 					this.SendPropertyChanged("Name");
 					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Password", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string Password
-		{
-			get
-			{
-				return this._Password;
-			}
-			set
-			{
-				if ((this._Password != value))
-				{
-					this.OnPasswordChanging(value);
-					this.SendPropertyChanging();
-					this._Password = value;
-					this.SendPropertyChanged("Password");
-					this.OnPasswordChanged();
 				}
 			}
 		}

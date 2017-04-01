@@ -47,11 +47,7 @@ namespace Pobezhdatel.Models
 
                     if (dbRoom == null)     // If such room doesn't exist, create it
                     {
-                        dbRoom = new T_Room
-                        {
-                            Name = message.RoomName,
-                            Password = ""
-                        };
+                        dbRoom = new T_Room { Name = message.RoomName };
 
                         db.T_Rooms.InsertOnSubmit(dbRoom);
                     }
