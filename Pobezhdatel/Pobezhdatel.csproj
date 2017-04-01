@@ -204,6 +204,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="Hubs\Utilities.cs" />
     <Compile Include="Models\GameModel.cs" />
     <Compile Include="Models\MessageModel.cs" />
     <Compile Include="Models\PobezhdatelDbModel.cs" />
