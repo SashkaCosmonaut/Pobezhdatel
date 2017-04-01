@@ -23,7 +23,7 @@ namespace Pobezhdatel.Hubs
 
             try
             {
-                var matches = Regex.Matches(message, "//[1-9]?(d|u)(100|[1-9][0-9]?)");
+                var matches = Regex.Matches(message, "//[1-9]?(d|u)(100|[1-9][0-9]?)(( *)\\+( *)[0-9]+)?");
 
                 // Roll every dice roll request and aggreagte all results to one string
                 return matches.Cast<Match>()
@@ -54,10 +54,25 @@ namespace Pobezhdatel.Hubs
                 var numberOfEdges = 1;                          // Range of rolled numbers
                 var rangeStart = 1;                             // Start of the range of rolled numbers
                 var sum = 0;                                    // Sum of all dice rolls
+                var addition = 0;                               // Possible addition value
                 var isNegative = diceRequest.Contains('u');     // Flag is dice should contain zero and negative results
+                var plusIndex = diceRequest.IndexOf('+');       // Index of plus sign for addition dice roll value
 
-                // Parse request
-                var requestParts = diceRequest.TrimStart('/').Split(new[] { 'd', 'u' }, StringSplitOptions.RemoveEmptyEntries);
+                if (plusIndex != -1)    // If there is plus sign then there is addition value
+                {
+                    addition = int.Parse(diceRequest.Substring(plusIndex + 1).Trim(' '));
+                    sum = addition;
+                }
+                else
+                {
+                    plusIndex = diceRequest.Length;
+                }
+
+                // Parse request from start till possible addition sign
+                var requestParts = diceRequest.Substring(0, plusIndex)
+                                              .TrimStart('/')
+                                              .TrimEnd(' ')
+                                              .Split(new[] { 'd', 'u' }, StringSplitOptions.RemoveEmptyEntries);
 
                 // If there is more than one dice, take the second part for edges else take the first
                 if (requestParts.Length > 1)
@@ -84,8 +99,13 @@ namespace Pobezhdatel.Hubs
                     result += newRoll + ", ";
                 }
 
-                // Remove trailing symbols and add the roll sum
-                return result.TrimEnd(' ', ',') + " = " + sum;
+                // Prepare result
+                result = result.TrimEnd(' ', ',');      // Remove trailing symbols 
+
+                if (plusIndex != -1)                    // Show addition if it is
+                    result += " + " + addition;
+
+                return result + " = " + sum;            // Add the roll sum
             }
             catch (Exception ex)
             {
