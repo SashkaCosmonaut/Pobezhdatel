@@ -23,7 +23,7 @@ namespace Pobezhdatel.Hubs
 
             try
             {
-                var matches = Regex.Matches(message, "//[1-9]?(d|к)(100|[1-9][0-9]?)");
+                var matches = Regex.Matches(message, "//[1-9]?(d|u)(100|[1-9][0-9]?)");
 
                 // Roll every dice roll request and aggreagte all results to one string
                 return matches.Cast<Match>()
@@ -50,28 +50,35 @@ namespace Pobezhdatel.Hubs
 
             try
             {
-                var numberOfDices = 1;
-                int numberOfEdges = 1;
+                var numberOfDices = 1;                          // How many times to roll the dice
+                var numberOfEdges = 1;                          // Range of rolled numbers
+                var rangeStart = 1;                             // Start of the range of rolled numbers
+                var isNegative = diceRequest.Contains('u');     // Flag is dice should contain zero and negative results
 
                 // Parse request
-                var requestParts = diceRequest.TrimStart('/').Split(new[] { 'd', 'к' }, StringSplitOptions.RemoveEmptyEntries);
+                var requestParts = diceRequest.TrimStart('/').Split(new[] { 'd', 'u' }, StringSplitOptions.RemoveEmptyEntries);
 
-                // If there is more than one dice, add 1 to number of edges for random number generation
+                // If there is more than one dice, take the second part for edges else take the first
                 if (requestParts.Length > 1)
                 {
                     numberOfDices = int.Parse(requestParts[0]);
-                    numberOfEdges += int.Parse(requestParts[1]);
+                    numberOfEdges = int.Parse(requestParts[1]);
                 }
                 else
                 {
-                    numberOfEdges += int.Parse(requestParts[0]);
+                    numberOfEdges = int.Parse(requestParts[0]);
                 }
 
                 var random = new Random(Guid.NewGuid().GetHashCode());
                 var result = diceRequest + ": ";
 
+                if (isNegative)
+                    rangeStart = -numberOfEdges;
+
                 for (var i = 0; i < numberOfDices; i++)         // Roll each dice in this request
-                    result += random.Next(1, numberOfEdges) + ", ";
+                {
+                    result += random.Next(rangeStart, numberOfEdges + 1) + ", ";
+                }
 
                 return result.TrimEnd(' ', ',');
             }
