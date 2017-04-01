@@ -53,6 +53,7 @@ namespace Pobezhdatel.Hubs
                 var numberOfDices = 1;                          // How many times to roll the dice
                 var numberOfEdges = 1;                          // Range of rolled numbers
                 var rangeStart = 1;                             // Start of the range of rolled numbers
+                var sum = 0;                                    // Sum of all dice rolls
                 var isNegative = diceRequest.Contains('u');     // Flag is dice should contain zero and negative results
 
                 // Parse request
@@ -77,10 +78,14 @@ namespace Pobezhdatel.Hubs
 
                 for (var i = 0; i < numberOfDices; i++)         // Roll each dice in this request
                 {
-                    result += random.Next(rangeStart, numberOfEdges + 1) + ", ";
+                    var newRoll = random.Next(rangeStart, numberOfEdges + 1);
+
+                    sum += newRoll;
+                    result += newRoll + ", ";
                 }
 
-                return result.TrimEnd(' ', ',');
+                // Remove trailing symbols and add the roll sum
+                return result.TrimEnd(' ', ',') + " = " + sum;
             }
             catch (Exception ex)
             {
