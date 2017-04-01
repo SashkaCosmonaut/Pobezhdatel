@@ -23,7 +23,7 @@ namespace Pobezhdatel.Hubs
 
             try
             {
-                var matches = Regex.Matches(message, "//[1-9]?(d|u)(100|[1-9][0-9]?)(( *)\\+( *)[0-9]+)?");
+                var matches = Regex.Matches(message, "//[1-9]?(d|u)(100|[1-9][0-9]?)(( *)(\\+|\\-)( *)[0-9]+)?");
 
                 // Roll every dice roll request and aggreagte all results to one string
                 return matches.Cast<Match>()
@@ -54,22 +54,14 @@ namespace Pobezhdatel.Hubs
                 var numberOfEdges = 1;                          // Range of rolled numbers
                 var rangeStart = 1;                             // Start of the range of rolled numbers
                 var sum = 0;                                    // Sum of all dice rolls
-                var addition = 0;                               // Possible addition value
                 var isNegative = diceRequest.Contains('u');     // Flag is dice should contain zero and negative results
-                var plusIndex = diceRequest.IndexOf('+');       // Index of plus sign for addition dice roll value
+                var additionValue = 0;                          // Addition value that is added to the dice roll result
 
-                if (plusIndex != -1)    // If there is plus sign then there is addition value
-                {
-                    addition = int.Parse(diceRequest.Substring(plusIndex + 1).Trim(' '));
-                    sum = addition;
-                }
-                else
-                {
-                    plusIndex = diceRequest.Length;
-                }
+                // Get index of "+" or "-" sign for addition value and positive or negative addition value itself
+                var indexOfAdditionSign = GetAdditionValue(diceRequest, out additionValue);
 
                 // Parse request from start till possible addition sign
-                var requestParts = diceRequest.Substring(0, plusIndex)
+                var requestParts = diceRequest.Substring(0, indexOfAdditionSign)
                                               .TrimStart('/')
                                               .TrimEnd(' ')
                                               .Split(new[] { 'd', 'u' }, StringSplitOptions.RemoveEmptyEntries);
@@ -86,7 +78,7 @@ namespace Pobezhdatel.Hubs
                 }
 
                 var random = new Random(Guid.NewGuid().GetHashCode());
-                var result = diceRequest + ": ";
+                var result = diceRequest + ":\t";
 
                 if (isNegative)
                     rangeStart = -numberOfEdges;
@@ -100,18 +92,50 @@ namespace Pobezhdatel.Hubs
                 }
 
                 // Prepare result
-                result = result.TrimEnd(' ', ',');      // Remove trailing symbols 
+                result = result.TrimEnd(' ', ',');                  // Remove trailing symbols 
 
-                if (plusIndex != -1)                    // Show addition if it is
-                    result += " + " + addition;
+                if (indexOfAdditionSign != diceRequest.Length)      // Show addition value if it is
+                {
+                    result += (additionValue > 0 ? " + " : " - ") + Math.Abs(additionValue);
+                }
 
-                return result + " = " + sum;            // Add the roll sum
+                return result + " = " + (sum + additionValue);      // Add the roll sum
             }
             catch (Exception ex)
             {
                 Log.Error("GetDiceRollText", ex);
                 return "";
             }
+        }
+
+        /// <summary>
+        /// Get value that is added to a dice rolling
+        /// </summary>
+        /// <param name="diceRequest">Text with dice request.</param>
+        /// <param name="additionValue">Positive or negative integer addition value.</param>
+        /// <returns>Index of addition symbol (+ or -) or request string length if there is no such symbols.</returns>
+        private static int GetAdditionValue(string diceRequest, out int additionValue)
+        {
+            var plusIndex = diceRequest.IndexOf('+');       // Index of plus sign for addition a value to dice roll 
+
+            if (plusIndex != -1)    // If there is plus sign then there is positive addition value
+            {
+                additionValue = int.Parse(diceRequest.Substring(plusIndex + 1).Trim(' '));
+                return plusIndex;
+            }
+
+            var minusIndex = diceRequest.IndexOf('-');      // Index of minus sign for subtraction a value from dice roll
+
+            if (minusIndex != -1)   // If there is minus sign then there is negative addition value
+            {
+                // With minus sign
+                additionValue = -int.Parse(diceRequest.Substring(minusIndex + 1).Trim(' '));
+                return minusIndex;
+            }
+
+            additionValue = 0;
+
+            return diceRequest.Length;
         }
     }
 }
