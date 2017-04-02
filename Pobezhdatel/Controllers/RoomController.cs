@@ -9,7 +9,7 @@ namespace Pobezhdatel.Controllers
     /// Controller for chat room.
     /// </summary>
     [Authorize]
-    public class RoomController : Controller
+    public class RoomController : BaseController
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(RoomController));
 
@@ -26,8 +26,12 @@ namespace Pobezhdatel.Controllers
         {
             Log.Debug("Index");
 
-            ViewBag.PlayerName = "Test";
-            ViewBag.RoomName = "Test";
+            // Set view parameters for current player
+            if (CurrentPlayer == null)
+                return RedirectToAction("Index", "Login");
+
+            ViewBag.PlayerName = CurrentPlayer.PlayerName;
+            ViewBag.RoomName = CurrentPlayer.RoomName;
 
             return View();
         }
@@ -40,7 +44,10 @@ namespace Pobezhdatel.Controllers
         {
             Log.Debug("GetMessages");
 
-            return JsonConvert.SerializeObject(DBModel.GetMessages(""));
+            // Take messages for current room
+            return CurrentPlayer != null 
+                ? JsonConvert.SerializeObject(DBModel.GetMessages(CurrentPlayer.RoomName)) 
+                : "[]";
         }
     }
 }

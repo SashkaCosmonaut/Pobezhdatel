@@ -191,6 +191,7 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="DB\PobezhdatelDbDataContext.cs" />
     <Compile Include="Controllers\RoomController.cs" />

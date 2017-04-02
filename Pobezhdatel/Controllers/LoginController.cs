@@ -10,7 +10,7 @@ namespace Pobezhdatel.Controllers
     /// <summary>
     /// Controller for login to the application.
     /// </summary>
-    public class LoginController : Controller
+    public class LoginController : BaseController
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(LoginController));
 
@@ -53,6 +53,8 @@ namespace Pobezhdatel.Controllers
                     new HttpCookie(
                         FormsAuthentication.FormsCookieName,
                         FormsAuthentication.Encrypt(authTicket)));
+
+                CurrentPlayer = model;
 
                 return RedirectToAction("Index", "Room");
             }
