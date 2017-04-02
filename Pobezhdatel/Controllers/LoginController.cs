@@ -30,7 +30,7 @@ namespace Pobezhdatel.Controllers
         /// <returns>Room view or current view with errors.</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LogIn(GameModel model)
+        public ActionResult LogIn(PlayerLoginModel model)
         {
             Log.Debug("LogIn");
 
