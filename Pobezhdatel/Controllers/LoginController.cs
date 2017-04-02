@@ -8,7 +8,7 @@ namespace Pobezhdatel.Controllers
     /// <summary>
     /// Controller for login to the application.
     /// </summary>
-    public class LoginController : BaseController
+    public class LoginController : Controller
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(LoginController));
 
@@ -37,8 +37,6 @@ namespace Pobezhdatel.Controllers
             try
             {
                 if (!ModelState.IsValid) return View("Index", model);
-
-                CurrentGameModel = model;
 
                 return RedirectToAction("Index", "Room");
             }

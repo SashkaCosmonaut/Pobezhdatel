@@ -9,7 +9,8 @@ namespace Pobezhdatel.Controllers
     /// <summary>
     /// Controller for chat room.
     /// </summary>
-    public class RoomController : BaseController
+    [Authorize]
+    public class RoomController : Controller
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(RoomController));
 
@@ -26,12 +27,8 @@ namespace Pobezhdatel.Controllers
         {
             Log.Debug("Index");
 
-            // Check that player is logged in
-            if (CurrentGameModel == null)
-                return RedirectToAction("Index", "Home");
-
-            ViewBag.PlayerName = CurrentGameModel.PlayerName;
-            ViewBag.RoomName = CurrentGameModel.RoomName;
+            ViewBag.PlayerName = "Test";
+            ViewBag.RoomName = "Test";
 
             return View();
         }
@@ -44,10 +41,7 @@ namespace Pobezhdatel.Controllers
         {
             Log.Debug("GetMessages");
 
-            // Check that player is logged in and take messages for current room
-            return CurrentGameModel != null
-                ? JsonConvert.SerializeObject(DBModel.GetMessages(CurrentGameModel.RoomName))
-                : "[]";
+            return JsonConvert.SerializeObject(DBModel.GetMessages(""));
         }
     }
 }

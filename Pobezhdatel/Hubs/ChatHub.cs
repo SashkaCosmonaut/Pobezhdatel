@@ -9,6 +9,7 @@ namespace Pobezhdatel.Hubs
     /// <summary>
     /// Main game chat.
     /// </summary>
+    [Authorize]
     public class ChatHub : Hub
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ChatHub));
