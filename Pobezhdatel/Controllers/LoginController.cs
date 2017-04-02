@@ -6,16 +6,16 @@ using Pobezhdatel.Models;
 namespace Pobezhdatel.Controllers
 {
     /// <summary>
-    /// Controller for main home page of the application.
+    /// Controller for login to the application.
     /// </summary>
-    public class HomeController : BaseController
+    public class LoginController : BaseController
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(HomeController));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(LoginController));
 
         /// <summary>
-        /// Show home page.
+        /// Show the login page.
         /// </summary>
-        /// <returns>View of home page.</returns>
+        /// <returns>View of the login page.</returns>
         public ActionResult Index()
         {
             Log.Debug("Index");

@@ -8,7 +8,7 @@
         <div class="panel panel-default">
             <div class="panel-heading"><h3 class="panel-title">Создать новую комнату или войти в существующую</h3></div>
             <div class="panel-body">
-                @using (Html.BeginForm("LogIn", "Home", FormMethod.Post, new { @class = "login-form" }))
+                @using (Html.BeginForm("LogIn", "Login", FormMethod.Post, new { @class = "login-form" }))
                 {
                     @* If there are an error in this field add class to show error state *@
                     <div class="form-group @( ViewData.ModelState.Values.Any() && ViewData.ModelState.Values.First().Errors.Count > 0 ? "has-error" : "") )">
