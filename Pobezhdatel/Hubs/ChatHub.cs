@@ -1,7 +1,10 @@
 ﻿using log4net;
 using Microsoft.AspNet.SignalR;
+using Newtonsoft.Json;
 using Pobezhdatel.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Security;
 
@@ -19,6 +22,13 @@ namespace Pobezhdatel.Hubs
         /// Model for communication with database.
         /// </summary>
         protected PobezhdatelDbModel DBModel = new PobezhdatelDbModel();
+
+        /// <summary>
+        /// Dictionary where Key is a room name and Value is a dictionary 
+        /// where Key is a connection Id and Value is a player name.
+        /// </summary>
+        protected readonly static Dictionary<string, Dictionary<string, string>> RoomsPlayers =
+            new Dictionary<string, Dictionary<string, string>>();
 
         /// <summary>
         /// Get player data from cookies.
@@ -52,11 +62,14 @@ namespace Pobezhdatel.Hubs
             var playerName = "";
             var roomName = "";
 
-            if (GetPlayerData(out playerName, out roomName))                    // If player data is successfully taken from cookies
+            if (GetPlayerData(out playerName, out roomName))                // If player data is successfully taken from cookies
             {
-                Groups.Add(Context.ConnectionId, roomName).Wait();              // Add player to group and wait for it
+                Groups.Add(Context.ConnectionId, roomName).Wait();          // Add player to group and wait for it
 
-                Clients.Group(roomName).playerJoinRoom(playerName, roomName);   // Notify other players in this room
+                // Take players of this room, convert them to array of objects for client and send to it
+                Clients.Group(roomName).playerJoinRoom(
+                    JsonConvert.SerializeObject(
+                        RoomsPlayers[roomName].Select(q => new { id = q.Key, name = q.Value})), playerName, roomName);
             }
 
             return base.OnConnected();
@@ -73,12 +86,8 @@ namespace Pobezhdatel.Hubs
             var roomName = "";
 
             if (GetPlayerData(out playerName, out roomName))                    // If player data is successfully taken from cookies
-            {
-                Groups.Remove(Context.ConnectionId, roomName).Wait();           // Remove player to group and wait for it
-
-                Clients.Group(roomName).playerLeaveRoom(playerName, roomName);  // Notify other players in this room
-            }
-
+                Clients.Group(roomName).playerLeaveRoom(Context.ConnectionId);  // Notify other players in this room
+            
             return base.OnDisconnected(stopCalled);
         }
 
