@@ -46,15 +46,8 @@
 </div>
 
 <script>
-    var curreentPlayerName = "@ViewBag.PlayerName";
-    var roomName = "@ViewBag.RoomName";
     var chat = $.connection.chatHub;    // Reference the auto-generated proxy for the hub
     var directSendingMethod = true;     // Direct (not reversed) sending method (Enter - send, Shift + Enter - new line) is default
-
-    // If there is no name or it is empty, then set Anonymous name
-    if (isEmptyOrSpaces(curreentPlayerName)) {
-        curreentPlayerName = "Анонимус";
-    }
 
     // Then load previous messages
     $.ajax({
@@ -78,8 +71,6 @@
 
     // Start the connection
     $.connection.hub.start().done(function () {
-
-        chat.server.joinRoom(roomName);    // Add user to a room
 
         $("#add-msg-btn").click(function() {                // Handle a click on the button for message addition
             sendMessageToServer($("#message-input").val());
@@ -119,16 +110,36 @@
         goToLastMessage();
 
         // Call the Send method on the hub, first parameter is current room name
-        chat.server.send("@ViewBag.RoomName", curreentPlayerName, messageText);
+        chat.server.send(messageText);
     }
+
+    /**
+     * Handle event of player join a game room.
+     */
+    chat.client.playerJoinRoom = function (playerName, roomName) {
+
+        // Save player and room names
+        chat.state.playerName = playerName;
+        chat.state.roomName = roomName;
+
+        alert("Player " + playerName + " CONNECTED to " + roomName);
+    };
+
+    /**
+     * Handle event of player leave a game room.
+     */
+    chat.client.playerLeaveRoom = function (playerName, roomName) {
+        alert("Player " + playerName + " LEAVED to " + roomName);
+    };
 
     /**
      * Function that the hub calls to display messages.
      */
-    chat.client.addMessageToChat = function (playerName, message, dicesRollResult) {
+    chat.client.addMessageToChat = function (message, dicesRollResult) {
         clearMessageInput();
         clearDefaultString();
-        addMessageToChat(playerName, message, dicesRollResult);
+
+        addMessageToChat(chat.state.playerName, message, dicesRollResult);
     };
 
     // Handle messages sending method changing

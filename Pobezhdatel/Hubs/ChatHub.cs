@@ -1,8 +1,9 @@
-﻿using System;
-using log4net;
+﻿using log4net;
 using Microsoft.AspNet.SignalR;
 using Pobezhdatel.Models;
+using System;
 using System.Threading.Tasks;
+using System.Web.Security;
 
 namespace Pobezhdatel.Hubs
 {
@@ -20,41 +21,91 @@ namespace Pobezhdatel.Hubs
         protected PobezhdatelDbModel DBModel = new PobezhdatelDbModel();
 
         /// <summary>
-        /// Add a player to a room.
+        /// Get player data from cookies.
         /// </summary>
-        /// <param name="roomName">Name of the room that player is joined.</param>
-        /// <returns>SignalR waits for this Task to complete.</returns>
-        public Task JoinRoom(string roomName)
+        /// <param name="playerName">Name of current player.</param>
+        /// <param name="roomName">Name of room where player is.</param>
+        /// <returns></returns>
+        private bool GetPlayerData(out string playerName, out string roomName)
         {
-            return Groups.Add(Context.ConnectionId, roomName);
+            playerName = "";
+            roomName = "";
+
+            var authCookie = Context.Request.Cookies[FormsAuthentication.FormsCookieName];
+
+            if (authCookie?.Value == null) return false;
+
+            var authTicket = FormsAuthentication.Decrypt(authCookie.Value);
+
+            playerName = authTicket.Name;
+            roomName = authTicket.UserData;
+
+            return true;
         }
 
         /// <summary>
-        /// Remove a player from a room.
+        /// Handle event of player connected to the game.
         /// </summary>
-        /// <param name="roomName">Name of the room that player is leaved.</param>
-        /// <returns>SignalR waits for this Task to complete.</returns>
-        public Task LeaveRoom(string roomName)
+        /// <returns>Task for async call of this method.</returns>
+        public override Task OnConnected()
         {
-            return Groups.Remove(Context.ConnectionId, roomName);
+            var playerName = "";
+            var roomName = "";
+
+            if (GetPlayerData(out playerName, out roomName))                    // If player data is successfully taken from cookies
+            {
+                Groups.Add(Context.ConnectionId, roomName).Wait();              // Add player to group and wait for it
+
+                Clients.Group(roomName).playerJoinRoom(playerName, roomName);   // Notify other players in this room
+            }
+
+            return base.OnConnected();
         }
 
         /// <summary>
-        /// Send a message to the main game chat.
+        /// Handle event of player leave the game.
         /// </summary>
-        /// <param name="roomName">Name of current room.</param>
-        /// <param name="playerName">Name of the player.</param>
+        /// <param name="stopCalled"></param>
+        /// <returns>Task for async call of this method.</returns>
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            var playerName = "";
+            var roomName = "";
+
+            if (GetPlayerData(out playerName, out roomName))                    // If player data is successfully taken from cookies
+            {
+                Groups.Remove(Context.ConnectionId, roomName).Wait();           // Remove player to group and wait for it
+
+                Clients.Group(roomName).playerLeaveRoom(playerName, roomName);  // Notify other players in this room
+            }
+
+            return base.OnDisconnected(stopCalled);
+        }
+
+        /// <summary>
+        /// Handle event of player reconnect to the game.
+        /// </summary>
+        /// <returns>Task for async call of this method.</returns>
+        public override Task OnReconnected()
+        {
+            return base.OnReconnected();
+        }
+
+        /// <summary>
+        /// Send a message to groups of current player.
+        /// </summary>
         /// <param name="message">Player's message.</param>
-        public void Send(string roomName, string playerName, string message)
+        public void Send(string message)
         {
             Log.Debug("Send");
 
             var dicesRoll = Utilities.DiceRoll(message);
 
             // If message succesfully sent to DB, show it in the chat
-            if (DBModel.AddMessage(new MessageModel(DateTime.Now, roomName, playerName, message, dicesRoll)))
+            if (DBModel.AddMessage(new MessageModel(DateTime.Now, Clients.Caller.roomName, Clients.Caller.playerName, message, dicesRoll)))
             {
-                Clients.Group(roomName).addMessageToChat(playerName, message, dicesRoll);
+                // We must pass a string to this method, not dynamic type
+                Clients.Group((string)Clients.Caller.roomName).addMessageToChat(message, dicesRoll);
             }
         }
     }

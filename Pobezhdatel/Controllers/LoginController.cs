@@ -43,7 +43,7 @@ namespace Pobezhdatel.Controllers
                 // Create and save cookies
                 var authTicket = new FormsAuthenticationTicket(
                     1,
-                    model.PlayerName,                   // Set user name linked with the cookie
+                    model.PlayerName,                   // Set player name linked with the cookie
                     DateTime.Now,
                     DateTime.Now.AddMinutes(240),
                     true,
