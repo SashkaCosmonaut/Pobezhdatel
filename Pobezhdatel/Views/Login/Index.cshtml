@@ -10,6 +10,7 @@
             <div class="panel-body">
                 @using (Html.BeginForm("LogIn", "Login", FormMethod.Post, new { @class = "login-form" }))
                 {
+                    @Html.AntiForgeryToken()
                     @* If there are an error in this field add class to show error state *@
                     <div class="form-group @( ViewData.ModelState.Values.Any() && ViewData.ModelState.Values.First().Errors.Count > 0 ? "has-error" : "") )">
                         @Html.LabelFor(q => q.RoomName, "Название новой или существующей комнаты")
